@@ -4,19 +4,22 @@ using StackExchange.Redis;
 
 namespace SignalRChat.Services
 {
-    public class RedisManager : IRedisManager
+    public class RedisManager(RedisConnectionFactory redisConnectionFactory) : IRedisManager
     {
-        private readonly RedisConnectionFactory _redisConnectionFactory;
+        #region Initialization
 
-        public RedisManager(RedisConnectionFactory redisConnectionFactory)
-        {
-            _redisConnectionFactory = redisConnectionFactory ?? throw new ArgumentNullException(nameof(redisConnectionFactory));
-        }
+        private readonly RedisConnectionFactory _redisConnectionFactory = redisConnectionFactory ?? throw new ArgumentNullException(nameof(redisConnectionFactory));
 
+        #endregion
+
+        #region Methods
+        
         public IDatabase GetDB(int databaseId, string configSectionName)
         {
             return _redisConnectionFactory.GetCurrentDB(databaseId, configSectionName);
         }
+
+        #endregion
     }
 
 }

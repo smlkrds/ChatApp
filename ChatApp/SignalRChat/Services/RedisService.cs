@@ -3,15 +3,15 @@ using SignalRChat.Services.Interfaces;
 
 namespace SignalRChat.Services
 {
-    public class RedisService : IRedisService
+    public class RedisService(IRedisManager redisManager) : IRedisService
     {
-        private readonly IRedisManager _redisManager;
-        public RedisService(IRedisManager redisManager)
-        {
-            _redisManager = redisManager ?? throw new ArgumentNullException(nameof(redisManager));
-        }
+        #region Initialization
 
-        #region CRUD
+        private readonly IRedisManager _redisManager = redisManager ?? throw new ArgumentNullException(nameof(redisManager));
+
+        #endregion
+
+        #region Methods
 
         public async Task Add(string key, string configSectionName, object data, int databaseId)
         {

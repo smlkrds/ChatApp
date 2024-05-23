@@ -1,20 +1,17 @@
-﻿using Microsoft.Extensions.Options;
-using SignalRChat.Configurations;
-using StackExchange.Redis;
+﻿using StackExchange.Redis;
 
 namespace SignalRChat.Factories
 {
-    public class RedisConnectionFactory
+    public class RedisConnectionFactory(IConfiguration configuration)
     {
-        private Lazy<ConnectionMultiplexer> _currentRedis;
-        private readonly RedisConnectionConfig _redisConnectionConfig;
-        private readonly IConfiguration _configuration;
+        #region Initialization
 
-        public RedisConnectionFactory(IConfiguration configuration, IOptions<RedisConnectionConfig> redisConnectionConfig)
-        {
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-            _redisConnectionConfig = redisConnectionConfig.Value;
-        }
+        private Lazy<ConnectionMultiplexer> _currentRedis;
+        private readonly IConfiguration _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+
+        #endregion
+
+        #region Methods
 
         public IDatabase GetCurrentDB(int databaseId, string configurationSectionName)
         {
@@ -39,5 +36,7 @@ namespace SignalRChat.Factories
 
             return options;
         }
+
+        #endregion
     }
 }

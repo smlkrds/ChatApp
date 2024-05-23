@@ -6,15 +6,16 @@ using SignalRChat.Services.Interfaces;
 
 namespace SignalRChat.Hubs
 {
-    public class ChatHub : Hub
+    public class ChatHub(IRedisService resdisService, IOptions<ChatAppRedisConfig> chatAppRedisConfig) : Hub
     {
-        private readonly IRedisService _resdisService;
-        private readonly IChatAppRedisConfig _chatAppRedisConfig;
-        public ChatHub(IRedisService resdisService, IOptions<ChatAppRedisConfig> chatAppRedisConfig)
-        {
-            _resdisService = resdisService;
-            _chatAppRedisConfig = chatAppRedisConfig.Value;
-        }
+        #region Initialization
+
+        private readonly IRedisService _resdisService = resdisService;
+        private readonly IChatAppRedisConfig _chatAppRedisConfig = chatAppRedisConfig.Value;
+
+        #endregion
+
+        #region Methods
 
         public async Task SendMessage(string user, string message)
         {
@@ -30,5 +31,7 @@ namespace SignalRChat.Hubs
 
             await _resdisService.Add(key, _chatAppRedisConfig.RedisConfigSection, data, 0);
         }
+
+        #endregion
     }
 }
