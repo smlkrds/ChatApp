@@ -3,9 +3,15 @@ using SignalRChat.Entities;
 
 namespace SignalRChat.Contexts
 {
-    public class MessageDbContext : DbContext
+    public class ChatAppDbContext : DbContext
     {
+        public ChatAppDbContext(DbContextOptions<ChatAppDbContext> options) : base(options)
+        {
+        }
+
         public virtual DbSet<Message> Messages { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Chat> Chats { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

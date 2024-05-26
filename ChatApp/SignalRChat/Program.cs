@@ -1,15 +1,17 @@
+using Microsoft.EntityFrameworkCore;
 using SignalRChat.Configurations;
-using SignalRChat.Hubs;
-using SignalRChat.Services.Interfaces;
-using SignalRChat.Services;
+using SignalRChat.Contexts;
 using SignalRChat.Factories;
+using SignalRChat.Hubs;
+using SignalRChat.Services;
+using SignalRChat.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 
-builder.WebHost.ConfigureServices(services => 
+builder.WebHost.ConfigureServices(services =>
 {
     services.AddSingleton<RedisConnectionFactory>();
     services.AddScoped<IRedisManager, RedisManager>();
@@ -17,6 +19,9 @@ builder.WebHost.ConfigureServices(services =>
 
     services.Configure<RedisConnectionConfig>(builder.Configuration.GetSection("RedisConnection:ChatAppRedisConnection"));
     services.Configure<ChatAppRedisConfig>(builder.Configuration.GetSection("ChatAppRedisConfig"));
+
+    services.AddDbContext<ChatAppDbContext>(options =>
+        options.UseNpgsql(builder.Configuration.GetConnectionString("ChatAppDbConnection")));
 });
 
 builder.Services.AddSignalR();

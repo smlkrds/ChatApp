@@ -4,8 +4,13 @@ using SignalRChat.Repositories.Interfaces;
 
 namespace SignalRChat.Repositories
 {
-    public class MessageRepository(MessageDbContext context) : BaseRepository<Message>,  IMessageRepository
+    public class MessageRepository : BaseRepository<Message>, IMessageRepository
     {
-        private readonly MessageDbContext _dbContext = context;
+        private readonly ChatAppDbContext _dbContext;
+
+        public MessageRepository(ChatAppDbContext context) : base(context)
+        {
+            _dbContext = context;
+        }
     }
 }
