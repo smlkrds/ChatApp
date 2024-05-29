@@ -6,11 +6,12 @@ using SignalRChat.Services.Interfaces;
 
 namespace SignalRChat.Hubs
 {
-    public class ChatHub(IRedisService resdisService, IOptions<ChatAppRedisConfig> chatAppRedisConfig) : Hub
+    public class ChatHub(IMessageService messageService, IRedisService resdisService, IOptions<ChatAppRedisConfig> chatAppRedisConfig) : Hub
     {
         #region Initialization
 
         private readonly IRedisService _resdisService = resdisService;
+        private readonly IMessageService _messageService = messageService;
         private readonly IChatAppRedisConfig _chatAppRedisConfig = chatAppRedisConfig.Value;
 
         #endregion
@@ -24,12 +25,13 @@ namespace SignalRChat.Hubs
             var data = new MessageDto()
             {
                 MessageContent = message,
-                Sender = user
+                SenderUserName = user
             };
 
             var key = $"MSG_{user}";
 
             await _resdisService.Add(key, _chatAppRedisConfig.RedisConfigSection, data, 0);
+            await _messageService.InsertMessage(data);
         }
 
         #endregion

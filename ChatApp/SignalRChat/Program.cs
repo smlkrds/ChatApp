@@ -3,6 +3,8 @@ using SignalRChat.Configurations;
 using SignalRChat.Contexts;
 using SignalRChat.Factories;
 using SignalRChat.Hubs;
+using SignalRChat.Repositories;
+using SignalRChat.Repositories.Interfaces;
 using SignalRChat.Services;
 using SignalRChat.Services.Interfaces;
 
@@ -16,6 +18,9 @@ builder.WebHost.ConfigureServices(services =>
     services.AddSingleton<RedisConnectionFactory>();
     services.AddScoped<IRedisManager, RedisManager>();
     services.AddScoped<IRedisService, RedisService>();
+    services.AddScoped<IMessageService, MessageService>();
+
+    services.AddTransient<IMessageRepository, MessageRepository>();
 
     services.Configure<RedisConnectionConfig>(builder.Configuration.GetSection("RedisConnection:ChatAppRedisConnection"));
     services.Configure<ChatAppRedisConfig>(builder.Configuration.GetSection("ChatAppRedisConfig"));
