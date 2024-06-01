@@ -1,16 +1,16 @@
-using Microsoft.EntityFrameworkCore;
-using SignalRChat.Configurations;
-using SignalRChat.Contexts;
-using SignalRChat.Factories;
 using SignalRChat.Hubs;
-using SignalRChat.Repositories;
-using SignalRChat.Repositories.Interfaces;
+using SignalRChat.Mapping;
+using SignalRChat.Contexts;
 using SignalRChat.Services;
+using SignalRChat.Factories;
+using SignalRChat.Repositories;
+using SignalRChat.Configurations;
+using Microsoft.EntityFrameworkCore;
 using SignalRChat.Services.Interfaces;
+using SignalRChat.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddRazorPages();
 
 builder.WebHost.ConfigureServices(services =>
@@ -27,17 +27,17 @@ builder.WebHost.ConfigureServices(services =>
 
     services.AddDbContext<ChatAppDbContext>(options =>
         options.UseNpgsql(builder.Configuration.GetConnectionString("ChatAppDbConnection")));
+
+    services.AddAutoMapper(typeof(MappingProfile));
 });
 
 builder.Services.AddSignalR();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

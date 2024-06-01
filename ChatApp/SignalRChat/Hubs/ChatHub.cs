@@ -24,7 +24,7 @@ namespace SignalRChat.Hubs
 
             var data = new MessageDto()
             {
-                MessageContent = message,
+                Content = message,
                 SenderUserName = user
             };
 
