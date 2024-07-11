@@ -18,6 +18,12 @@ namespace SignalRChat.Contexts
             modelBuilder.Entity<Message>()
                 .Property(e => e.Id);
 
+            modelBuilder.Entity<User>()
+                .HasKey(e => e.Id);
+
+            modelBuilder.Entity<Chat>()
+                .HasKey(e => e.Id);
+
             base.OnModelCreating(modelBuilder);
         }
     }
